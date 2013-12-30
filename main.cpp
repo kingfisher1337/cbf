@@ -5,63 +5,99 @@
  * Created on December 27, 2013, 4:45 PM
  */
 
-#include <cstdlib>
-#include <fstream>
-#include "io.hpp"
-#include <iostream>
-//#include <mpi.h>
+#include <mpi/mpi.h>
+#include <string>
+#include <stdlib.h>
 using namespace std;
 
-int mainMaster(int argc, char ** argv) {
-    return 0;
-}
+int mainMaster(
+    const string & infoFileName, const string & sFileName, 
+    const string & opath,
+    int interpolationLevel,
+    int Nk, int Nkint, int Nkomega);
+int mainSlave(
+    int rank,
+    int interpolationLevel,
+    int Nk, int Nkomega);
 
-int mainSlave(int rank) {
-    return 0;
+static bool startsWith(const char * s, const char * p) {
+    int i;
+    for (i = 0; s[i] != 0 && p[i] != 0; ++i) {
+        if (s[i] != p[i]) {
+            return false;
+        }
+    }
+    return p[i] == 0;
 }
 
 int main(int argc, char ** argv) {
-//    int rank;
-//    MPI_Init(&argc, &argv);
-//    MPI_Comm_rank(MPI_COMM_WORLD, &rank);
-//    
-//    int error = rank == 0 ? mainMaster(argc, argv) : mainSlave(rank);
-//    
-//    MPI_Finalize();
-//    
-//    return error;
+    int rank;
+    MPI_Init(&argc, &argv);
+    MPI_Comm_rank(MPI_COMM_WORLD, &rank);
     
-    int gridSize;
-    int numLayers;
-    Tensor1<double> densities;
-    Tensor1<double> masses;
-    readInfoFileMartin(
-        "/media/michael/OS/tmp/bac/dplayer/256density/2layer/ungekippt/0.06distance/daten.txt", 
-        gridSize, numLayers, densities, masses);
-    
-    Tensor4< complex<double> > S;
-    Tensor1<double> kValues;
-    readGroundstateMartin(
-        "/media/michael/OS/tmp/bac/dplayer/256density/2layer/ungekippt/0.06distance/s.dat",
-        1, gridSize, 5, numLayers, kValues, S);
-    
-    int kmax = (S.size(0)-1)/2;
-    ofstream o("/media/michael/OS/tmp/bac/dplayer/256density/2layer/ungekippt/0.06distance/Stest.dat");
-    for (int kx = -kmax; kx <= kmax; ++kx) {
-        for (int ky = -kmax; ky <= kmax; ++ky) {
-            o << kValues(kx) << " " << kValues(ky);
-            for (int a = 0; a < numLayers; ++a) {
-                for (int b = 0; b < numLayers; ++b) {
-                    o << " " << S(kx, ky, a, b).real()
-                      << " " << S(kx, ky, a, b).imag();
-                }
+    string ipath = ""; // optional
+    string infofile = "-";
+    string sfile = "-";
+    string opath = ""; // optional
+    int Nk = -1;
+    int Nkint = -1;
+    int Nomega = -1;
+    int interpolationLevel = 0; // optional
+    for (int i = 0; i < argc; ++i) {
+        if (startsWith(argv[i], "ipath=")) {
+            ipath = string(argv[i]).substr(6);
+            if (ipath[ipath.length()-1] != '/') {
+                ipath += "/";
             }
-            o << endl;
+        } else if (startsWith(argv[i], "opath=")) {
+            opath = string(argv[i]).substr(6);
+            if (opath[opath.length()-1] != '/') {
+                opath += "/";
+            }
+        } else if (startsWith(argv[i], "infofile=")) {
+            infofile = string(argv[i]).substr(9);
+        } else if (startsWith(argv[i], "sfile=")) {
+            sfile = string(argv[i]).substr(6);
+        } else if (startsWith(argv[i], "Nk=")) {
+            Nk = atoi(string(argv[i]).substr(3).c_str());
+        } else if (startsWith(argv[i], "Nkint=")) {
+            Nkint = atoi(string(argv[i]).substr(6).c_str());
+        } else if (startsWith(argv[i], "Nomega=")) {
+            Nomega = atoi(string(argv[i]).substr(7).c_str());
+        } else if (startsWith(argv[i], "interpolationLevel=")) {
+            interpolationLevel = atoi(string(argv[i]).substr(19).c_str());
         }
-        o << endl;
     }
-    o.close();
     
-    return 0;
+    int error = -1;
+    if (infofile == "-") {
+        if (rank == 0) {
+            cerr << "no infofile was given!" << endl;
+        }
+    } else if (sfile == "-") {
+        if (rank == 0) {
+            cerr << "no sfile was given!" << endl;
+        }
+    } else if (Nk == -1) {
+        if (rank == 0) {
+            cerr << "Nk was not given!" << endl;
+        }
+    } else if (Nkint == -1) {
+        if (rank == 0) {
+            cerr << "Nkint was not given!" << endl;
+        }
+    } else if (Nomega == -1) {
+        if (rank == 0) {
+            cerr << "Nomega was not given!" << endl;
+        }
+    } else {
+        error = rank == 0 ?
+            mainMaster(ipath + infofile, ipath + sfile, opath, interpolationLevel, Nk, Nkint, Nomega) :
+            mainSlave(rank, interpolationLevel, Nk, Nomega);
+    }
+    
+    MPI_Finalize();
+    
+    return error;
 }
 

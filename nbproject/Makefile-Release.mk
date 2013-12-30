@@ -35,8 +35,13 @@ OBJECTDIR=${CND_BUILDDIR}/${CND_CONF}/${CND_PLATFORM}
 
 # Object Files
 OBJECTFILES= \
+	${OBJECTDIR}/cbf.o \
+	${OBJECTDIR}/feynman.o \
 	${OBJECTDIR}/io.o \
-	${OBJECTDIR}/main.o
+	${OBJECTDIR}/lapack.o \
+	${OBJECTDIR}/main.o \
+	${OBJECTDIR}/mainMaster.o \
+	${OBJECTDIR}/mainSlave.o
 
 
 # C Compiler Flags
@@ -61,17 +66,42 @@ LDLIBSOPTIONS=
 
 ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/cbf: ${OBJECTFILES}
 	${MKDIR} -p ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}
-	${LINK.cc} -o ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/cbf ${OBJECTFILES} ${LDLIBSOPTIONS}
+	${LINK.cc} -o ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/cbf ${OBJECTFILES} ${LDLIBSOPTIONS} -llapack -lblas
+
+${OBJECTDIR}/cbf.o: cbf.cpp 
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} $@.d
+	$(COMPILE.cc) -O2 -MMD -MP -MF $@.d -o ${OBJECTDIR}/cbf.o cbf.cpp
+
+${OBJECTDIR}/feynman.o: feynman.cpp 
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} $@.d
+	$(COMPILE.cc) -O2 -MMD -MP -MF $@.d -o ${OBJECTDIR}/feynman.o feynman.cpp
 
 ${OBJECTDIR}/io.o: io.cpp 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} $@.d
 	$(COMPILE.cc) -O2 -MMD -MP -MF $@.d -o ${OBJECTDIR}/io.o io.cpp
 
+${OBJECTDIR}/lapack.o: lapack.cpp 
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} $@.d
+	$(COMPILE.cc) -O2 -MMD -MP -MF $@.d -o ${OBJECTDIR}/lapack.o lapack.cpp
+
 ${OBJECTDIR}/main.o: main.cpp 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} $@.d
 	$(COMPILE.cc) -O2 -MMD -MP -MF $@.d -o ${OBJECTDIR}/main.o main.cpp
+
+${OBJECTDIR}/mainMaster.o: mainMaster.cpp 
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} $@.d
+	$(COMPILE.cc) -O2 -MMD -MP -MF $@.d -o ${OBJECTDIR}/mainMaster.o mainMaster.cpp
+
+${OBJECTDIR}/mainSlave.o: mainSlave.cpp 
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} $@.d
+	$(COMPILE.cc) -O2 -MMD -MP -MF $@.d -o ${OBJECTDIR}/mainSlave.o mainSlave.cpp
 
 # Subprojects
 .build-subprojects:

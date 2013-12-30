@@ -4,7 +4,10 @@
     <logicalFolder name="HeaderFiles"
                    displayName="Header Files"
                    projectFiles="true">
+      <itemPath>cbf.hpp</itemPath>
+      <itemPath>feynman.hpp</itemPath>
       <itemPath>io.hpp</itemPath>
+      <itemPath>lapack.hpp</itemPath>
       <itemPath>tensor.hpp</itemPath>
     </logicalFolder>
     <logicalFolder name="ResourceFiles"
@@ -14,8 +17,13 @@
     <logicalFolder name="SourceFiles"
                    displayName="Source Files"
                    projectFiles="true">
+      <itemPath>cbf.cpp</itemPath>
+      <itemPath>feynman.cpp</itemPath>
       <itemPath>io.cpp</itemPath>
+      <itemPath>lapack.cpp</itemPath>
       <itemPath>main.cpp</itemPath>
+      <itemPath>mainMaster.cpp</itemPath>
+      <itemPath>mainSlave.cpp</itemPath>
     </logicalFolder>
     <logicalFolder name="TestFiles"
                    displayName="Test Files"
@@ -40,14 +48,33 @@
       </toolsSet>
       <compileType>
         <ccTool>
-          <commandlineTool>g++</commandlineTool>
+          <commandlineTool>mpic++</commandlineTool>
         </ccTool>
+        <linkerTool>
+          <commandLine>-llapack -lblas</commandLine>
+        </linkerTool>
       </compileType>
+      <item path="cbf.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="cbf.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="feynman.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="feynman.hpp" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="io.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="io.hpp" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="lapack.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="lapack.hpp" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="main.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="mainMaster.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="mainSlave.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="tensor.hpp" ex="false" tool="3" flavor2="0">
       </item>
@@ -73,12 +100,31 @@
         <asmTool>
           <developmentMode>5</developmentMode>
         </asmTool>
+        <linkerTool>
+          <commandLine>-llapack -lblas</commandLine>
+        </linkerTool>
       </compileType>
+      <item path="cbf.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="cbf.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="feynman.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="feynman.hpp" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="io.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="io.hpp" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="lapack.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="lapack.hpp" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="main.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="mainMaster.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="mainSlave.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="tensor.hpp" ex="false" tool="3" flavor2="0">
       </item>

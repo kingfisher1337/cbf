@@ -1,4 +1,5 @@
 #include "io.hpp"
+#include <iostream>
 #include <fstream>
 using namespace std;
 
@@ -119,13 +120,17 @@ void readGroundstateMartin(
     int kmax,
     int numLayers,
     Tensor1<double> & kValues,
-    Tensor4< complex<double> > & staticStructureFactor) {
+    Tensor4< complex<double> > & staticStructureFactor,
+    void (*kValuesCallback)(TensorBase1<double> &),
+    void (*progressCallback)(TensorBase4< complex<double> > &, int, int)) {
     // reads static structure factor from file,
     // where it is given at gridSize² grid points in momentum space;
     // but we are only interested in (2kmax+1)² grid points
     // (symmetric around the origin in momentum space);
     
     const int M = numLayers;
+    
+    cout << "[MASTER]: beginning to read groundstate file \"" << filename << "\"" << endl;
     
     ifstream in(filename.c_str());
     
@@ -142,6 +147,8 @@ void readGroundstateMartin(
         ++k0;
     }
     
+    cout << "[MASTER]: determined k0 = " << k0 << endl;
+    
     int N; // output is given on a grid of (2N+1)² points
     if (interpolationLevel < 0) {
         N = kmax / (1 - interpolationLevel);
@@ -151,11 +158,15 @@ void readGroundstateMartin(
     staticStructureFactor.resize(-N, N, -N, N, 0, M-1, 0, M-1);
     kValues.resize(-N, N);
     
+    cout << "[MASTER]: get ground state on (2*" << N << "+1)² grid points" << endl;
+    
     in.seekg(0);
     
     int outputStride = interpolationLevel > 0 ? interpolationLevel+1 : 1;
+    cout << "[MASTER]: determined an output stride of " << outputStride << endl;
     int kx = -N;
     int ky = -N;
+    bool firstStripe = true;
     for (int i = 0; i < gridSize && kx <= N; ++i) {
         for (int j = 0; j < gridSize && kx <= N; ++j) {
             if (i-k0 < -kmax || i-k0 > kmax || j-k0 < -kmax || j-k0 > kmax) {
@@ -177,15 +188,24 @@ void readGroundstateMartin(
                 }
                 ky += outputStride;
                 if (ky > N) {
-                    if (interpolationLevel > 0) {
-                        if (kx == -N) {
+                    if (kx == -N) {
+                        if (interpolationLevel > 0) {
                             interpolateKVals(kValues, interpolationLevel);
                         }
-                        TensorBase3< complex<double> > Sline = staticStructureFactor(kx);
-                        interpolateSLine(Sline, interpolationLevel);
-                        if (kx > -N) {
+                        if (kValuesCallback != 0) {
+                            kValuesCallback(kValues);
+                        }
+                    }
+                    TensorBase3< complex<double> > Sline = staticStructureFactor(kx);
+                    interpolateSLine(Sline, interpolationLevel);
+                    if (kx > -N) {
+                        if (interpolationLevel > 0) {
                             interpolateSStripe(staticStructureFactor, kx, interpolationLevel);
                         }
+                        if (progressCallback != 0) {
+                            progressCallback(staticStructureFactor, firstStripe ? -N : kx-interpolationLevel, kx);
+                        }
+                        firstStripe = false;
                     }
                     ky = -N;
                     kx += outputStride;

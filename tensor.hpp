@@ -35,6 +35,9 @@ public:
     int baseIndex(int i) const {
         return b[i];
     }
+    void setBaseIndex(int i, int m) {
+        b[i] = m;
+    }
     K & operator()(int i1) {
         int k = (i1-b[0]);
         return m[k];
@@ -44,6 +47,9 @@ public:
         return m[k];
     }
     K * getMemory() {
+        return m;
+    }
+    const K * getMemory() const {
         return m;
     }
 };
@@ -83,6 +89,9 @@ public:
     int baseIndex(int i) const {
         return b[i];
     }
+    void setBaseIndex(int i, int m) {
+        b[i] = m;
+    }
     K & operator()(int i1, int i2) {
         int k = (i2-b[1]) +
                    (i1-b[0]) * n[1];
@@ -98,6 +107,9 @@ public:
         return TensorBase1<K>(&m[k], b[1], b[1]+n[1]-1);
     }
     K * getMemory() {
+        return m;
+    }
+    const K * getMemory() const {
         return m;
     }
 };
@@ -141,6 +153,9 @@ public:
     int baseIndex(int i) const {
         return b[i];
     }
+    void setBaseIndex(int i, int m) {
+        b[i] = m;
+    }
     K & operator()(int i1, int i2, int i3) {
         int k = (i3-b[2]) +
                    (i2-b[1]) * n[2] +
@@ -163,6 +178,9 @@ public:
         return TensorBase1<K>(&m[k], b[2], b[2]+n[2]-1);
     }
     K * getMemory() {
+        return m;
+    }
+    const K * getMemory() const {
         return m;
     }
 };
@@ -210,6 +228,9 @@ public:
     int baseIndex(int i) const {
         return b[i];
     }
+    void setBaseIndex(int i, int m) {
+        b[i] = m;
+    }
     K & operator()(int i1, int i2, int i3, int i4) {
         int k = (i4-b[3]) +
                    (i3-b[2]) * n[3] +
@@ -240,6 +261,9 @@ public:
         return TensorBase1<K>(&m[k], b[3], b[3]+n[3]-1);
     }
     K * getMemory() {
+        return m;
+    }
+    const K * getMemory() const {
         return m;
     }
 };
@@ -291,6 +315,9 @@ public:
     int baseIndex(int i) const {
         return b[i];
     }
+    void setBaseIndex(int i, int m) {
+        b[i] = m;
+    }
     K & operator()(int i1, int i2, int i3, int i4, int i5) {
         int k = (i5-b[4]) +
                    (i4-b[3]) * n[4] +
@@ -330,6 +357,9 @@ public:
         return TensorBase1<K>(&m[k], b[4], b[4]+n[4]-1);
     }
     K * getMemory() {
+        return m;
+    }
+    const K * getMemory() const {
         return m;
     }
 };
@@ -385,6 +415,9 @@ public:
     int baseIndex(int i) const {
         return b[i];
     }
+    void setBaseIndex(int i, int m) {
+        b[i] = m;
+    }
     K & operator()(int i1, int i2, int i3, int i4, int i5, int i6) {
         int k = (i6-b[5]) +
                    (i5-b[4]) * n[5] +
@@ -434,6 +467,9 @@ public:
         return TensorBase1<K>(&m[k], b[5], b[5]+n[5]-1);
     }
     K * getMemory() {
+        return m;
+    }
+    const K * getMemory() const {
         return m;
     }
 };
@@ -492,6 +528,9 @@ public:
     }
     int baseIndex(int i) const {
         return b[i];
+    }
+    void setBaseIndex(int i, int m) {
+        b[i] = m;
     }
     K & operator()(int i1, int i2, int i3, int i4, int i5, int i6, int i7) {
         int k = (i7-b[6]) +
@@ -555,6 +594,9 @@ public:
     K * getMemory() {
         return m;
     }
+    const K * getMemory() const {
+        return m;
+    }
 };
 
 template <typename K> class TensorBase8 {
@@ -615,6 +657,9 @@ public:
     }
     int baseIndex(int i) const {
         return b[i];
+    }
+    void setBaseIndex(int i, int m) {
+        b[i] = m;
     }
     K & operator()(int i1, int i2, int i3, int i4, int i5, int i6, int i7, int i8) {
         int k = (i8-b[7]) +
@@ -690,6 +735,9 @@ public:
     K * getMemory() {
         return m;
     }
+    const K * getMemory() const {
+        return m;
+    }
 };
 
 template <typename K> class TensorBase9 {
@@ -754,6 +802,9 @@ public:
     }
     int baseIndex(int i) const {
         return b[i];
+    }
+    void setBaseIndex(int i, int m) {
+        b[i] = m;
     }
     K & operator()(int i1, int i2, int i3, int i4, int i5, int i6, int i7, int i8, int i9) {
         int k = (i9-b[8]) +
@@ -842,6 +893,9 @@ public:
     K * getMemory() {
         return m;
     }
+    const K * getMemory() const {
+        return m;
+    }
 };
 
 template <typename K> class TensorBase10 {
@@ -910,6 +964,9 @@ public:
     }
     int baseIndex(int i) const {
         return b[i];
+    }
+    void setBaseIndex(int i, int m) {
+        b[i] = m;
     }
     K & operator()(int i1, int i2, int i3, int i4, int i5, int i6, int i7, int i8, int i9, int i10) {
         int k = (i10-b[9]) +
@@ -1012,6 +1069,9 @@ public:
     K * getMemory() {
         return m;
     }
+    const K * getMemory() const {
+        return m;
+    }
 };
 
 template <typename K> class TensorBase11 {
@@ -1084,6 +1144,9 @@ public:
     }
     int baseIndex(int i) const {
         return b[i];
+    }
+    void setBaseIndex(int i, int m) {
+        b[i] = m;
     }
     K & operator()(int i1, int i2, int i3, int i4, int i5, int i6, int i7, int i8, int i9, int i10, int i11) {
         int k = (i11-b[10]) +
@@ -1199,6 +1262,9 @@ public:
         return TensorBase1<K>(&m[k], b[10], b[10]+n[10]-1);
     }
     K * getMemory() {
+        return m;
+    }
+    const K * getMemory() const {
         return m;
     }
 };
@@ -2744,4 +2810,3 @@ public:
 };
 
 #endif
-

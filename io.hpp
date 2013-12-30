@@ -1,6 +1,6 @@
 /* 
  * File:   io.hpp
- * Author: michael
+ * Author: kingfisher1337
  *
  * Created on December 27, 2013, 7:34 PM
  */
@@ -26,6 +26,8 @@ void readGroundstateMartin(
     int kmax,
     int numLayers,
     Tensor1<double> & kValues,
-    Tensor4< std::complex<double> > & staticStructureFactor);
+    Tensor4< std::complex<double> > & staticStructureFactor,
+    void (*kValuesCallback)(TensorBase1<double> &),
+    void (*progressCallback)(TensorBase4< std::complex<double> > &, int, int));
 
 #endif	/* IO_HPP */

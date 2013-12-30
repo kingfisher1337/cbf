@@ -24,10 +24,13 @@
       </nativedebugger>
       <runprofile version="9">
         <runcommandpicklist>
-          <runcommandpicklistitem>mpirun -np 4 "${OUTPUT_PATH}"</runcommandpicklistitem>
           <runcommandpicklistitem>"${OUTPUT_PATH}"</runcommandpicklistitem>
+          <runcommandpicklistitem>mpirun -np 4 "${OUTPUT_PATH}"</runcommandpicklistitem>
+          <runcommandpicklistitem>mpirun -np 4 "${OUTPUT_PATH}" Nk=64 Nkint=128 Nomega=500 ipath="/media/michael/OS/tmp/bac/dplayer/256density/2layer/ungekippt/0.06distance" "daten.txt" "s.dat"</runcommandpicklistitem>
+          <runcommandpicklistitem>mpirun -np 4 "${OUTPUT_PATH}" Nk=64 Nkint=128 Nomega=500 ipath="/media/michael/OS/tmp/bac/dplayer/256density/2layer/ungekippt/0.06distance" infofile="daten.txt" "s.dat"</runcommandpicklistitem>
+          <runcommandpicklistitem>mpirun -np 4 "${OUTPUT_PATH}" Nk=64 Nkint=128 Nomega=500 ipath="/media/michael/OS/tmp/bac/dplayer/256density/2layer/ungekippt/0.06distance" infofile="daten.txt" sfile="s.dat"</runcommandpicklistitem>
         </runcommandpicklist>
-        <runcommand>"${OUTPUT_PATH}"</runcommand>
+        <runcommand>mpirun -np 4 "${OUTPUT_PATH}" Nk=64 Nkint=128 Nomega=500 ipath="/media/michael/OS/tmp/bac/dplayer/256density/2layer/ungekippt/0.06distance" infofile="daten.txt" sfile="s.dat"</runcommand>
         <rundir></rundir>
         <buildfirst>true</buildfirst>
         <terminal-type>0</terminal-type>
@@ -60,8 +63,11 @@
         <runcommandpicklist>
           <runcommandpicklistitem>"${OUTPUT_PATH}"</runcommandpicklistitem>
           <runcommandpicklistitem>mpirun -np 4 "${OUTPUT_PATH}"</runcommandpicklistitem>
+          <runcommandpicklistitem>mpirun -np 4 "${OUTPUT_PATH}" Nk=64 Nkint=128 Nomega=500 ipath="/media/michael/OS/tmp/bac/dplayer/256density/2layer/ungekippt/0.06distance" "daten.txt" "s.dat"</runcommandpicklistitem>
+          <runcommandpicklistitem>mpirun -np 4 "${OUTPUT_PATH}" Nk=64 Nkint=128 Nomega=500 ipath="/media/michael/OS/tmp/bac/dplayer/256density/2layer/ungekippt/0.06distance" infofile="daten.txt" "s.dat"</runcommandpicklistitem>
+          <runcommandpicklistitem>mpirun -np 4 "${OUTPUT_PATH}" Nk=64 Nkint=128 Nomega=500 ipath="/media/michael/OS/tmp/bac/dplayer/256density/2layer/ungekippt/0.06distance" infofile="daten.txt" sfile="s.dat"</runcommandpicklistitem>
         </runcommandpicklist>
-        <runcommand>mpirun -np 4 "${OUTPUT_PATH}"</runcommand>
+        <runcommand>mpirun -np 4 "${OUTPUT_PATH}" Nk=64 Nkint=128 Nomega=500 ipath="/media/michael/OS/tmp/bac/dplayer/256density/2layer/ungekippt/0.06distance" infofile="daten.txt" sfile="s.dat"</runcommand>
         <rundir></rundir>
         <buildfirst>true</buildfirst>
         <terminal-type>0</terminal-type>
