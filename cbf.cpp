@@ -1,4 +1,5 @@
 #include <complex>
+#include <iostream>
 #include "tensor.hpp"
 using namespace std;
 
@@ -67,33 +68,28 @@ void solveCBFSelfEnergy(
     const TensorBase4< complex<double> > & psi,
     const TensorBase4< complex<double> > & phi,
     const TensorBase4< complex<double> > & zeta,
-    double deltak, int Nomega, double domega, double epsilon,
+    double deltak, double domega, double epsilon,
     int kx, int ky, int m, int n,
     TensorBase1< complex<double> > & Sigma) {
     
-    const int M = omega.size(1);
+    const int M = omega.size(2);
     const int kmax = (omega.size(0)-1)/2;
+    const int Nomega = Sigma.size();
     const complex<double> iepsilon(0, epsilon);
     
-    const int ksx1 = kx - kmax;
-    const int ksx2 = kx + kmax;
-    const int ksy1 = ky - kmax;
-    const int ksy2 = ky + kmax;
-    
+    const int ksx1 = max(kx - kmax, -kmax);
+    const int ksx2 = min(kx + kmax, +kmax);
+    const int ksy1 = max(ky - kmax, -kmax);
+    const int ksy2 = min(ky + kmax, +kmax);
+        
     double f = deltak / (2*pi);
     f = f*f / 2;
-    //memset(Sigma.getMemory(), 0, NOMEGA * sizeof(complex<double>));
     for (int s = 0; s < M; ++s) {
         for (int t = 0; t < M; ++t) {
             for (int ksx = ksx1; ksx <= ksx2; ++ksx) {
                 for (int ksy = ksy1; ksy <= ksy2; ++ksy) {
-//            for (int ksx = -kmax; ksx <= kmax; ++ksx) {
-//                for (int ksy = -kmax; ksy <= kmax; ++ksy) {
                     int ktx = kx - ksx;
                     int kty = ky - ksy;
-//                    if (ktx < -kmax || ktx > kmax || kty < -kmax || kty > kmax) {
-//                        continue; // todo: do it more efficient with a break
-//                    }
                     
                     complex<double> x = Vstn(rho, masses, omega, phi, psi, zeta, kv(ks), kv(kt), kv(k), s, t, m, deltak) *
                                         conj(Vstn(rho, masses, omega, phi, psi, zeta, kv(ks), kv(kt), kv(k), s, t, n, deltak)) * f;
@@ -104,4 +100,20 @@ void solveCBFSelfEnergy(
             }
         }
     }
+}
+
+void solveCBFG(
+    const TensorBase3<double> & omega) {
+    
+}
+
+void solveCBFchi(
+    const TensorBase3<double> & omega,
+    const TensorBase4< complex<double> > & phi,
+    const TensorBase1< complex<double> > & Sigma,
+    TensorBase1< complex<double> > & G,
+    TensorBase1< complex<double> > & chi) {
+    
+    
+    
 }

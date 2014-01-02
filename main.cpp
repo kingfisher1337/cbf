@@ -14,11 +14,15 @@ int mainMaster(
     const string & infoFileName, const string & sFileName, 
     const string & opath,
     int interpolationLevel,
-    int Nk, int Nkint, int Nkomega);
+    int Nk_, int Nkint, int Nomega_,
+    bool feynmansOnly,
+    bool selfenergyOnly);
 int mainSlave(
     int rank,
     int interpolationLevel,
-    int Nk, int Nkomega);
+    int Nk, int Nomega,
+    bool feynmansOnly,
+    bool selfenergyOnly);
 
 static bool startsWith(const char * s, const char * p) {
     int i;
@@ -92,8 +96,8 @@ int main(int argc, char ** argv) {
         }
     } else {
         error = rank == 0 ?
-            mainMaster(ipath + infofile, ipath + sfile, opath, interpolationLevel, Nk, Nkint, Nomega) :
-            mainSlave(rank, interpolationLevel, Nk, Nomega);
+            mainMaster(ipath + infofile, ipath + sfile, opath, interpolationLevel, Nk, Nkint, Nomega, false, true) :
+            mainSlave(rank, interpolationLevel, Nk, Nomega, false, true);
     }
     
     MPI_Finalize();

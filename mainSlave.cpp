@@ -1,3 +1,4 @@
+#include "cbf.hpp"
 #include <complex>
 #include "feynman.hpp"
 #include <iostream>
@@ -8,7 +9,9 @@ using namespace std;
 int mainSlave(
     int rank,
     int interpolationLevel,
-    int Nk, int Nkomega) {
+    int Nk, int Nomega,
+    bool feynmansOnly,
+    bool selfenergyOnly) {
     
     int M;
     Tensor1<double> densities;
@@ -55,14 +58,44 @@ int mainSlave(
         lapackHermitianEigensystemFree(h);
     }
     
+    if (feynmansOnly) {
+        return 0;
+    }
+    
+    double domega;
+    double epsilon;
     Tensor3<double> omega(-kmax, +kmax, -kmax, +kmax, 0, M-1);
     Tensor4< complex<double> > psi(-kmax, +kmax, -kmax, +kmax, 0, M-1, 0, M-1);
     Tensor4< complex<double> > phi(-kmax, +kmax, -kmax, +kmax, 0, M-1, 0, M-1);
     Tensor4< complex<double> > zeta(-kmax, +kmax, -kmax, +kmax, 0, M-1, 0, M-1);
+    MPI_Bcast(&domega, 1, MPI_DOUBLE, 0, MPI_COMM_WORLD);
+    MPI_Bcast(&epsilon, 1, MPI_DOUBLE, 0, MPI_COMM_WORLD);
     MPI_Bcast(omega.getMemory(), omega.size(), MPI_DOUBLE, 0, MPI_COMM_WORLD);
     MPI_Bcast(psi.getMemory(), psi.size(), MPI_DOUBLE_COMPLEX, 0, MPI_COMM_WORLD);
     MPI_Bcast(phi.getMemory(), phi.size(), MPI_DOUBLE_COMPLEX, 0, MPI_COMM_WORLD);
     MPI_Bcast(zeta.getMemory(), zeta.size(), MPI_DOUBLE_COMPLEX, 0, MPI_COMM_WORLD);
+    
+    // domega
+    
+    {
+        int ctrl[5];
+        MPI_Status status;
+        Tensor1< complex<double> > Sigma(Nomega);
+        do {
+            MPI_Recv(ctrl, 5, MPI_INT, 0, MPI_ANY_TAG, MPI_COMM_WORLD, &status);
+            
+            if (ctrl[0] != 0) {                
+                solveCBFSelfEnergy(
+                    densities, masses, omega, psi, phi, zeta, 
+                    deltak, domega, epsilon, 
+                    ctrl[1], ctrl[2], ctrl[3], ctrl[4], 
+                    Sigma);
+                
+                MPI_Send(&ctrl[1], 4, MPI_INT, 0, 1, MPI_COMM_WORLD);
+                MPI_Send(Sigma.getMemory(), Sigma.size(), MPI_DOUBLE_COMPLEX, 0, 1, MPI_COMM_WORLD);
+            }
+        } while (ctrl[0] != 0);
+    }
     
     return 0;
 }

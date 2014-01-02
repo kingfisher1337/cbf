@@ -9,6 +9,7 @@
 #define	IO_HPP
 
 #include <complex>
+#include <fstream>
 #include <string>
 #include "tensor.hpp"
 
@@ -29,5 +30,9 @@ void readGroundstateMartin(
     Tensor4< std::complex<double> > & staticStructureFactor,
     void (*kValuesCallback)(TensorBase1<double> &),
     void (*progressCallback)(TensorBase4< std::complex<double> > &, int, int));
+
+
+void prepareMatrixFile(std::ofstream & o, int Nk, const TensorBase1<double> & kvals, int Nomega, double domega, int M);
+void writeMatrixFileEntry(std::ofstream & o, int Nk, int Nomega, int M, int k, int iomega, int n, std::complex<double> x);
 
 #endif	/* IO_HPP */

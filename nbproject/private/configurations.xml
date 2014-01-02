@@ -29,8 +29,9 @@
           <runcommandpicklistitem>mpirun -np 4 "${OUTPUT_PATH}" Nk=64 Nkint=128 Nomega=500 ipath="/media/michael/OS/tmp/bac/dplayer/256density/2layer/ungekippt/0.06distance" "daten.txt" "s.dat"</runcommandpicklistitem>
           <runcommandpicklistitem>mpirun -np 4 "${OUTPUT_PATH}" Nk=64 Nkint=128 Nomega=500 ipath="/media/michael/OS/tmp/bac/dplayer/256density/2layer/ungekippt/0.06distance" infofile="daten.txt" "s.dat"</runcommandpicklistitem>
           <runcommandpicklistitem>mpirun -np 4 "${OUTPUT_PATH}" Nk=64 Nkint=128 Nomega=500 ipath="/media/michael/OS/tmp/bac/dplayer/256density/2layer/ungekippt/0.06distance" infofile="daten.txt" sfile="s.dat"</runcommandpicklistitem>
+          <runcommandpicklistitem>mpirun -np 4 "${OUTPUT_PATH}" Nk=64 Nkint=128 Nomega=500 ipath="/media/michael/OS/tmp/bac/dplayer/256density/2layer/ungekippt/0.06distance" infofile="daten.txt" sfile="s.dat" opath="/media/michael/OS/tmp/bac/excitations/256density/2layer/ungekippt/0.06distance"</runcommandpicklistitem>
         </runcommandpicklist>
-        <runcommand>mpirun -np 4 "${OUTPUT_PATH}" Nk=64 Nkint=128 Nomega=500 ipath="/media/michael/OS/tmp/bac/dplayer/256density/2layer/ungekippt/0.06distance" infofile="daten.txt" sfile="s.dat"</runcommand>
+        <runcommand>mpirun -np 4 "${OUTPUT_PATH}" Nk=64 Nkint=128 Nomega=500 ipath="/media/michael/OS/tmp/bac/dplayer/256density/2layer/ungekippt/0.06distance" infofile="daten.txt" sfile="s.dat" opath="/media/michael/OS/tmp/bac/excitations/256density/2layer/ungekippt/0.06distance"</runcommand>
         <rundir></rundir>
         <buildfirst>true</buildfirst>
         <terminal-type>0</terminal-type>
@@ -66,8 +67,9 @@
           <runcommandpicklistitem>mpirun -np 4 "${OUTPUT_PATH}" Nk=64 Nkint=128 Nomega=500 ipath="/media/michael/OS/tmp/bac/dplayer/256density/2layer/ungekippt/0.06distance" "daten.txt" "s.dat"</runcommandpicklistitem>
           <runcommandpicklistitem>mpirun -np 4 "${OUTPUT_PATH}" Nk=64 Nkint=128 Nomega=500 ipath="/media/michael/OS/tmp/bac/dplayer/256density/2layer/ungekippt/0.06distance" infofile="daten.txt" "s.dat"</runcommandpicklistitem>
           <runcommandpicklistitem>mpirun -np 4 "${OUTPUT_PATH}" Nk=64 Nkint=128 Nomega=500 ipath="/media/michael/OS/tmp/bac/dplayer/256density/2layer/ungekippt/0.06distance" infofile="daten.txt" sfile="s.dat"</runcommandpicklistitem>
+          <runcommandpicklistitem>mpirun -np 4 "${OUTPUT_PATH}" Nk=64 Nkint=128 Nomega=500 ipath="/media/michael/OS/tmp/bac/dplayer/256density/2layer/ungekippt/0.06distance" infofile="daten.txt" sfile="s.dat" opath="/media/michael/OS/tmp/bac/excitations/256density/2layer/ungekippt/0.06distance"</runcommandpicklistitem>
         </runcommandpicklist>
-        <runcommand>mpirun -np 4 "${OUTPUT_PATH}" Nk=64 Nkint=128 Nomega=500 ipath="/media/michael/OS/tmp/bac/dplayer/256density/2layer/ungekippt/0.06distance" infofile="daten.txt" sfile="s.dat"</runcommand>
+        <runcommand>mpirun -np 4 "${OUTPUT_PATH}" Nk=64 Nkint=128 Nomega=500 ipath="/media/michael/OS/tmp/bac/dplayer/256density/2layer/ungekippt/0.06distance" infofile="daten.txt" sfile="s.dat" opath="/media/michael/OS/tmp/bac/excitations/256density/2layer/ungekippt/0.06distance"</runcommand>
         <rundir></rundir>
         <buildfirst>true</buildfirst>
         <terminal-type>0</terminal-type>

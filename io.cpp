@@ -1,6 +1,8 @@
 #include "io.hpp"
+#include <iomanip>
 #include <iostream>
-#include <fstream>
+#include <limits>
+#include <sstream>
 using namespace std;
 
 static void skipDoubles(istream & in, int n) {
@@ -216,4 +218,39 @@ void readGroundstateMartin(
     
     in.close();
     
+}
+
+static int getNewlineBytes() {
+    stringstream s;
+    s << endl;
+    return s.str().size();
+}
+static const int newlineBytes = getNewlineBytes();
+static const int fieldSize = numeric_limits<double>::digits10 + 7;
+void prepareMatrixFile(ofstream & o, int Nk, const TensorBase1<double> & kvals, int Nomega, double domega, int M) {
+    o.seekp(0);
+    o.precision(numeric_limits<double>::digits10 - 1);
+    o << scientific;
+    for (int k = 0; k <= Nk; ++k) {
+        for (int iomega = 0; iomega < Nomega; ++iomega) {
+            o << setw(fieldSize) << kvals(k)
+              << setw(fieldSize) << (iomega*domega);
+            for (int a = 0; a < M; ++a) {
+                for (int b = 0; b < M; ++b) {
+                    o << setw(fieldSize) << 0  // real part
+                      << setw(fieldSize) << 0; // imaginary part
+                }
+            }
+            o << endl;
+        }
+        o << endl;
+    }
+    o.flush();
+}
+void writeMatrixFileEntry(ofstream & o, int Nk, int Nomega, int M, int k, int iomega, int n, complex<double> x) {
+    const int numBytesPerLine = (2+2*M*M) * fieldSize + newlineBytes;
+    o.seekp(k * (Nomega * numBytesPerLine + newlineBytes) + iomega * numBytesPerLine + (2+2*n) * fieldSize);
+    o << setw(fieldSize) << real(x)
+      << setw(fieldSize) << imag(x);
+    o.flush();
 }
