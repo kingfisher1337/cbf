@@ -1,4 +1,5 @@
 #include "feynman.hpp"
+#include <iostream>
 using namespace std;
 
 void solveFeynmanProblem(
@@ -30,13 +31,13 @@ void solveFeynmanProblem(
         for (int ky = -kmax; ky <= +kmax; ++ky) {
             for (int a = 0; a < M; ++a) {
                 for (int b = 0; b < M; ++b) {
-                    S(kx, ky, a, b) = sqrt(m(a) * m(b));
+                    S(kx, ky, a, b) *= sqrt(m(a) * m(b));
                 }
             }
             
-            TensorBase2< complex<double> > tmp = S(kx, ky);
+            TensorBase2< complex<double> > tmp = S(kx, ky);            
             lapackHermitianEigensystemResult * r = lapackHermitianEigensystem(h, tmp);
-            
+                        
             for (int n = 0; n < M; ++n) {
                 double k2 = (kx*kx + ky*ky) * deltak*deltak;
                 result.omega(kx, ky, n) = k2 / 2 / r->eigenvalues(n);

@@ -1,6 +1,5 @@
 #include "io.hpp"
 #include <iomanip>
-#include <iostream>
 #include <limits>
 #include <sstream>
 using namespace std;
@@ -132,8 +131,6 @@ void readGroundstateMartin(
     
     const int M = numLayers;
     
-    cout << "[MASTER]: beginning to read groundstate file \"" << filename << "\"" << endl;
-    
     ifstream in(filename.c_str());
     
     int k0 = 0;
@@ -149,8 +146,6 @@ void readGroundstateMartin(
         ++k0;
     }
     
-    cout << "[MASTER]: determined k0 = " << k0 << endl;
-    
     int N; // output is given on a grid of (2N+1)² points
     if (interpolationLevel < 0) {
         N = kmax / (1 - interpolationLevel);
@@ -160,12 +155,9 @@ void readGroundstateMartin(
     staticStructureFactor.resize(-N, N, -N, N, 0, M-1, 0, M-1);
     kValues.resize(-N, N);
     
-    cout << "[MASTER]: get ground state on (2*" << N << "+1)² grid points" << endl;
-    
     in.seekg(0);
     
     int outputStride = interpolationLevel > 0 ? interpolationLevel+1 : 1;
-    cout << "[MASTER]: determined an output stride of " << outputStride << endl;
     int kx = -N;
     int ky = -N;
     bool firstStripe = true;
@@ -227,7 +219,7 @@ static int getNewlineBytes() {
 }
 static const int newlineBytes = getNewlineBytes();
 static const int fieldSize = numeric_limits<double>::digits10 + 7;
-void prepareMatrixFile(ofstream & o, int Nk, const TensorBase1<double> & kvals, int Nomega, double domega, int M) {
+void prepareRealKOmegaDataFile(ofstream & o, int Nk, const TensorBase1<double> & kvals, int Nomega, double domega, int numFields) {
     o.seekp(0);
     o.precision(numeric_limits<double>::digits10 - 1);
     o << scientific;
@@ -235,11 +227,8 @@ void prepareMatrixFile(ofstream & o, int Nk, const TensorBase1<double> & kvals, 
         for (int iomega = 0; iomega < Nomega; ++iomega) {
             o << setw(fieldSize) << kvals(k)
               << setw(fieldSize) << (iomega*domega);
-            for (int a = 0; a < M; ++a) {
-                for (int b = 0; b < M; ++b) {
-                    o << setw(fieldSize) << 0  // real part
-                      << setw(fieldSize) << 0; // imaginary part
-                }
+            for (int i = 0; i < numFields; ++i) {
+                o << setw(fieldSize) << 0;
             }
             o << endl;
         }
@@ -247,10 +236,39 @@ void prepareMatrixFile(ofstream & o, int Nk, const TensorBase1<double> & kvals, 
     }
     o.flush();
 }
+void prepareRealKKDataFile(ofstream & o, int Nk, const TensorBase1<double> & kvals, int numFields) {
+    o.seekp(0);
+    o.precision(numeric_limits<double>::digits10 - 1);
+    o << scientific;
+    for (int kx = -Nk; kx <= Nk; ++kx) {
+        for (int ky = -Nk; ky <= Nk; ++ky) {
+            o << setw(fieldSize) << kvals(kx)
+              << setw(fieldSize) << kvals(ky);
+            for (int i = 0; i < numFields; ++i) {
+                o << setw(fieldSize) << 0;
+            }
+            o << endl;
+        }
+        o << endl;
+    }
+    o.flush();
+}
+void prepareMatrixFile(ofstream & o, int Nk, const TensorBase1<double> & kvals, int Nomega, double domega, int M) {
+    prepareRealKOmegaDataFile(o, Nk, kvals, Nomega, domega, 2*M*M);
+}
+void writeRealKOmegaDataFileEntry(ofstream & o, int Nk, int Nomega, int numCols, int k, int iomega, int n, double x) {
+    const int numBytesPerLine = (2+numCols) * fieldSize + newlineBytes;
+    o.seekp(k * (Nomega * numBytesPerLine + newlineBytes) + iomega * numBytesPerLine + (2+n) * fieldSize);
+    o << setw(fieldSize) << x;
+}
+void writeRealKKDataFileEntry(ofstream & o, int Nk, int numCols, int kx, int ky, int n, double x) {
+    const int numBytesPerLine = (2+numCols) * fieldSize + newlineBytes;
+    o.seekp((kx+Nk) * ((2*Nk+1) * numBytesPerLine + newlineBytes) + (ky+Nk) * numBytesPerLine + (2+n) * fieldSize);
+    o << setw(fieldSize) << x;
+}
 void writeMatrixFileEntry(ofstream & o, int Nk, int Nomega, int M, int k, int iomega, int n, complex<double> x) {
     const int numBytesPerLine = (2+2*M*M) * fieldSize + newlineBytes;
     o.seekp(k * (Nomega * numBytesPerLine + newlineBytes) + iomega * numBytesPerLine + (2+2*n) * fieldSize);
     o << setw(fieldSize) << real(x)
       << setw(fieldSize) << imag(x);
-    o.flush();
 }

@@ -40,10 +40,10 @@ static complex<double> Vstn(
     int knx, int kny,
     int s, int t, int n,
     double deltak) {
-    
+        
     complex<double> result(0, 0);
     
-    const int M = omega.size(1);
+    const int M = omega.size(2);
     
     for (int a = 0; a < M; ++a) {
         result -= (
@@ -81,7 +81,7 @@ void solveCBFSelfEnergy(
     const int ksx2 = min(kx + kmax, +kmax);
     const int ksy1 = max(ky - kmax, -kmax);
     const int ksy2 = min(ky + kmax, +kmax);
-        
+       
     double f = deltak / (2*pi);
     f = f*f / 2;
     for (int s = 0; s < M; ++s) {

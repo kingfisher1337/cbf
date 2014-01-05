@@ -2,7 +2,8 @@
 #include <complex>
 #include "feynman.hpp"
 #include <iostream>
-#include <mpi/mpi.h>
+#include <mpi.h>
+#include <fstream>
 #include "tensor.hpp"
 using namespace std;
 
@@ -21,7 +22,7 @@ int mainSlave(
     masses.resize(M);
     MPI_Bcast(densities.getMemory(), M, MPI_DOUBLE, 0, MPI_COMM_WORLD);
     MPI_Bcast(masses.getMemory(), M, MPI_DOUBLE, 0, MPI_COMM_WORLD);
-    
+        
     int kmax;
     Tensor1<double> kValues;
     MPI_Bcast(&kmax, 1, MPI_INT, 0, MPI_COMM_WORLD);
@@ -33,7 +34,7 @@ int mainSlave(
     {
         int ctrl[3];
         MPI_Status status;
-        Tensor4< complex<double> > Spart(0, interpolationLevel+2, -kmax, +kmax, 0, M-1, 0, M-1);
+        Tensor4< complex<double> > Spart(0, interpolationLevel+2, -kmax, +kmax, 0, M-1, 0, M-1);        
         FeynmanResult feynmanResult;
         lapackHermitianEigensystemHandle * h = lapackHermitianEigensystemInit(M);
         
@@ -44,6 +45,27 @@ int mainSlave(
                 int kx2 = ctrl[2];
                 MPI_Recv(Spart.getMemory(), (kx2-kx1+1)*(2*kmax+1)*M*M, MPI_DOUBLE_COMPLEX, 0, MPI_ANY_TAG, MPI_COMM_WORLD, &status);
                 Spart.setBaseIndex(0, kx1);
+                
+//                {
+//                    stringstream s;
+//                    s << "/media/michael/OS/tmp/bac/excitations/256density/2layer/ungekippt/0.06distance/S/" << kx1 << ".dat";
+//                    ofstream o(s.str().c_str());
+//                    for (int kx = kx1; kx <= kx2; ++kx) {
+//                        for (int ky = -kmax; ky <= kmax; ++ky) {
+//                            o << kValues(kx) << " " << kValues(ky);
+//                            for (int a = 0; a < M; ++a) {
+//                                for (int b = 0; b < M; ++b) {
+//                                    o << " " << real(Spart(kx, ky, a, b))
+//                                      << " " << imag(Spart(kx, ky, a, b));
+//                                }
+//                            }
+//                            o << endl;
+//                        }
+//                        o << endl;
+//                    }
+//                    o.close();
+//                }
+                
                 solveFeynmanProblem(Spart, masses, densities, deltak, feynmanResult, h);
                 MPI_Send(&ctrl[1], 2, MPI_INT, 0, 1, MPI_COMM_WORLD);
                 int n = (kx2-kx1+1) * (2*kmax+1) * M;

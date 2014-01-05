@@ -5,9 +5,13 @@
  * Created on December 27, 2013, 4:45 PM
  */
 
-#include <mpi/mpi.h>
+#include <mpi.h>
 #include <string>
 #include <stdlib.h>
+#include <sstream>
+#include <fstream>
+
+#include "Logger.hpp"
 using namespace std;
 
 int mainMaster(
@@ -16,7 +20,8 @@ int mainMaster(
     int interpolationLevel,
     int Nk_, int Nkint, int Nomega_,
     bool feynmansOnly,
-    bool selfenergyOnly);
+    bool selfenergyOnly,
+    Logger * logger);
 int mainSlave(
     int rank,
     int interpolationLevel,
@@ -95,13 +100,25 @@ int main(int argc, char ** argv) {
             cerr << "Nomega was not given!" << endl;
         }
     } else {
+        
+        Logger * logger = 0;
+        ofstream ofsLogger;
+        if (rank == 0) {
+            stringstream filename;
+            filename << opath << rank << ".log";
+            ofsLogger.open(filename.str().c_str());
+            logger = new Logger(ofsLogger, rank);
+        }
+        
         error = rank == 0 ?
-            mainMaster(ipath + infofile, ipath + sfile, opath, interpolationLevel, Nk, Nkint, Nomega, false, true) :
+            mainMaster(ipath + infofile, ipath + sfile, opath, interpolationLevel, Nk, Nkint, Nomega, false, true, logger) :
             mainSlave(rank, interpolationLevel, Nk, Nomega, false, true);
+        
+        ofsLogger.close();
+        delete logger;
     }
     
     MPI_Finalize();
     
     return error;
 }
-

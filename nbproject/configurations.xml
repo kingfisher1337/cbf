@@ -4,6 +4,7 @@
     <logicalFolder name="HeaderFiles"
                    displayName="Header Files"
                    projectFiles="true">
+      <itemPath>Logger.hpp</itemPath>
       <itemPath>cbf.hpp</itemPath>
       <itemPath>feynman.hpp</itemPath>
       <itemPath>io.hpp</itemPath>
@@ -17,6 +18,7 @@
     <logicalFolder name="SourceFiles"
                    displayName="Source Files"
                    projectFiles="true">
+      <itemPath>Logger.cpp</itemPath>
       <itemPath>cbf.cpp</itemPath>
       <itemPath>feynman.cpp</itemPath>
       <itemPath>io.cpp</itemPath>
@@ -54,6 +56,10 @@
           <commandLine>-llapack -lblas</commandLine>
         </linkerTool>
       </compileType>
+      <item path="Logger.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="Logger.hpp" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="cbf.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="cbf.hpp" ex="false" tool="3" flavor2="0">
@@ -104,6 +110,10 @@
           <commandLine>-llapack -lblas</commandLine>
         </linkerTool>
       </compileType>
+      <item path="Logger.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="Logger.hpp" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="cbf.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="cbf.hpp" ex="false" tool="3" flavor2="0">
